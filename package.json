@@ -1,0 +1,26 @@
+{
+  "name": "map",
+  "version": "0.0.1",
+  "description": "map for the browser and node.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nathanfaucett/map.git"
+  },
+  "main": "src/index.js",
+  "keywords": [
+    "map",
+    "map.js"
+  ],
+  "author": "Nathan Faucett",
+  "license": "BSD-2-Clause",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "grunt": "",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-jsbeautifier": ""
+  },
+  "dependencies": {
+    "type": "nathanfaucett/type"
+  }
+}
+

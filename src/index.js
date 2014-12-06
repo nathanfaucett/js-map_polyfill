@@ -1,128 +1,134 @@
 var type = require("type");
 
 
-var hasOwnProp = Object.prototype.hasOwnProperty;
+var NativeMap = global.Map,
+    MapShim, forEach, createCallback, get, getIndex;
 
 
-function hiddenStore(obj, key) {
-    var valueOf = obj.valueOf,
-        store = {
-            key: key
-        };
+if (type.isNative(NativeMap)) {
+    MapShim = NativeMap;
 
-    obj.valueOf = function(value) {
-        return value !== key ? valueOf.apply(this, arguments) : store;
+    MapShim.prototype.count = function() {
+        return this.size;
+    };
+} else {
+    MapShim = function Map() {
+        this._keys = [];
+        this._values = [];
+    };
+    MapShim.prototype.constructor = MapShim;
+
+    MapShim.prototype.get = function(key) {
+
+        return get(key, this._keys, this._values);
     };
 
-    return store;
-}
+    MapShim.prototype.set = function(key, value) {
+        var index = getIndex(key, this._keys),
+            keys;
 
-function createStore() {
-    var key = {},
-        keys = [];
+        if (index !== -1) {
+            this._values[index] = value;
+        } else {
+            keys = this._keys;
+            index = keys.length;
 
-    function storeFn(obj) {
-        var store;
-
-        if (!type.isObject(obj)) {
-            throw new TypeError("Invalid value used as key");
-        }
-
-        store = obj.valueOf(key);
-
-        if (store == null || store.key !== key) {
-            store = hiddenStore(obj, key);
-            keys[keys.length] = obj;
-        }
-
-        return store;
-    }
-
-    storeFn.clear = function() {
-        var i = keys.length,
-            value;
-
-        while (i--) {
-            value = keys[i];
-            delete value.valueOf;
-            keys.splice(i, 1);
+            keys[index] = key;
+            this._values[index] = value;
         }
     };
 
-    storeFn.remove = function(obj) {
-        var store = storeFn(obj),
-            i;
+    MapShim.prototype.has = function(key) {
 
-        if (!hasOwnProp.call(store, "value")) {
+        return getIndex(key, this._keys, this._values) !== -1;
+    };
+
+    MapShim.prototype["delete"] = function(key) {
+        var keys = this._keys,
+            values = this._values,
+            index = getIndex(key, keys, values);
+
+        if (index === -1) {
             return false;
         }
 
-        i = keys.length;
-        while (i--) {
-            if (keys[i] === obj) {
-                keys.splice(i, 1);
-                break;
+        keys.splice(index, 1);
+        values.splice(index, 1);
+
+        return true;
+    };
+
+    MapShim.prototype.clear = function() {
+
+        this._keys.length = 0;
+        this._values.length = 0;
+    };
+
+    if (Object.defineProperty) {
+        Object.defineProperty(MapShim.prototype, "size", {
+            get: function() {
+                return this._keys.length;
+            }
+        });
+    }
+
+    MapShim.prototype.count = function() {
+        return this._keys.length;
+    };
+
+    MapShim.prototype.length = 1;
+
+    MapShim.prototype.forEach = function(fn, thisArg) {
+        return forEach(
+            this,
+            this._keys,
+            this._values,
+            thisArg != null ? createCallback(fn, thisArg) : fn
+        );
+    };
+
+    forEach = function forEach(obj, keys, values, fn) {
+        var i = -1,
+            length = keys.length - 1;
+
+        while (i++ < length) {
+            if (fn(values[i], keys[i], obj) === false) {
+                return false;
             }
         }
-        delete obj.valueOf;
 
-        return delete store.value;
+        return obj;
     };
 
-    storeFn.count = function() {
-        return keys.length;
+    createCallback = function createCallback(fn, thisArg) {
+        return function callback(value, key, obj) {
+            fn.call(thisArg, value, key, obj);
+        };
     };
 
-    return storeFn;
+    get = function get(key, keys, values) {
+        var index = getIndex(key, keys);
+
+        return index !== -1 ? values[index] : undefined;
+    };
+
+    getIndex = function getIndex(key, keys) {
+        var i = keys.length,
+            other;
+
+        while (i--) {
+            other = keys[i];
+
+            if (key === other || (key !== key && other !== other)) {
+                return i;
+            }
+        }
+
+        return -1;
+    };
 }
 
-
-var internal = createStore();
-
-
-function Map() {
-    internal(this).value = createStore();
-}
-
-Map.prototype.constructor = Map;
-
-Map.prototype.has = function(key) {
-
-    return hasOwnProp.call(internal(this).value(key), "value");
-};
-
-Map.prototype.get = function(key) {
-
-    return internal(this).value(key).value;
-};
-
-Map.prototype.set = function(key, value) {
-
-    internal(this).value(key).value = value;
-};
-
-Map.prototype.clear = function() {
-
-    internal(this).value.clear();
-};
-
-Map.prototype.remove = function(key) {
-
-    return internal(this).value.remove(key);
-};
-
-Map.prototype["delete"] = Map.prototype.remove;
-
-if (Object.defineProperty) {
-    Object.defineProperty(Map.prototype, "length", {
-        get: function() {
-            return internal(this).value.count();
-        },
-        set: function() {}
-    });
-} else {
-    Map.prototype.length = 0;
-}
+MapShim.prototype.remove = MapShim.prototype["delete"];
 
 
-module.exports = Map;
+module.exports = MapShim;

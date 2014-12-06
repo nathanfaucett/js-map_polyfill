@@ -20,6 +20,7 @@
     "grunt-jsbeautifier": ""
   },
   "dependencies": {
+    "create_map": "nathanfaucett/create_map",
     "type": "nathanfaucett/type"
   }
 }

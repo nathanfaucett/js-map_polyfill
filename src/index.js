@@ -2,7 +2,7 @@ var type = require("type"),
     createMap = require("create_map");
 
 
-var NativeMap = global.Map,
+var NativeMap = typeof(Map) === "undefined" ? null : Map,
     MapShim, forEach, createCallback;
 
 

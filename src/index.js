@@ -1,4 +1,4 @@
-var isNative = require("isNative"),
+var isNative = require("is_native"),
     createMap = require("create_map");
 
 

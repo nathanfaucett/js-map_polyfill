@@ -1,4 +1,4 @@
-var type = require("type"),
+var isNative = require("isNative"),
     createMap = require("create_map");
 
 
@@ -6,7 +6,7 @@ var NativeMap = typeof(Map) !== "undefined" ? Map : null,
     MapShim, forEach, createCallback;
 
 
-if (type.isNative(NativeMap)) {
+if (isNative(NativeMap)) {
     MapShim = NativeMap;
 
     MapShim.prototype.count = function() {

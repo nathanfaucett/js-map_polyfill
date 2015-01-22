@@ -1,15 +1,17 @@
 {
-  "name": "map",
+  "name": "map_shim",
   "version": "0.0.1",
-  "description": "map for the browser and node.js",
+  "description": "Map_shim for the browser and node.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nathanfaucett/map.git"
+    "url": "https://github.com/nathanfaucett/map_shim.git"
   },
   "main": "src/index.js",
   "keywords": [
     "map",
-    "map.js"
+    "map.js",
+    "map_shim",
+    "map_shim.js"
   ],
   "author": "Nathan Faucett",
   "license": "BSD-2-Clause",
@@ -21,7 +23,7 @@
   },
   "dependencies": {
     "create_map": "nathanfaucett/create_map",
-    "type": "nathanfaucett/type"
+    "is_native": "nathanfaucett/is_native"
   }
 }
 

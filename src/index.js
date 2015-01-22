@@ -14,45 +14,45 @@ if (isNative(NativeMap)) {
     };
 } else {
     MapShim = function Map() {
-        this._map = createMap();
+        this.__map = createMap();
     };
     MapShim.prototype.constructor = MapShim;
 
     MapShim.prototype.get = function(key) {
 
-        return this._map.get(key);
+        return this.__map.get(key);
     };
 
     MapShim.prototype.set = function(key, value) {
 
-        this._map.set(key, value);
+        this.__map.set(key, value);
     };
 
     MapShim.prototype.has = function(key) {
 
-        return this._map.has(key);
+        return this.__map.has(key);
     };
 
     MapShim.prototype["delete"] = function(key) {
 
-        return this._map.remove(key);
+        return this.__map.remove(key);
     };
 
     MapShim.prototype.clear = function() {
 
-        this._map.clear();
+        this.__map.clear();
     };
 
     if (Object.defineProperty) {
         Object.defineProperty(MapShim.prototype, "size", {
             get: function() {
-                return this._map.size();
+                return this.__map.size();
             }
         });
     }
 
     MapShim.prototype.count = function() {
-        return this._map.size();
+        return this.__map.size();
     };
 
     MapShim.prototype.length = 1;
@@ -60,16 +60,16 @@ if (isNative(NativeMap)) {
     MapShim.prototype.forEach = function(fn, thisArg) {
         return forEach(
             this,
-            this._map,
+            this.__map,
             thisArg != null ? createCallback(fn, thisArg) : fn
         );
     };
 
     forEach = function forEach(obj, map, fn) {
         var i = -1,
-            length = map.size() - 1;
+            il = map.count() - 1;
 
-        while (i++ < length) {
+        while (i++ < il) {
             if (fn(map.value(i), map.key(i), obj) === false) {
                 return false;
             }

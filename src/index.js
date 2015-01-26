@@ -3,61 +3,61 @@ var isNative = require("is_native"),
 
 
 var NativeMap = typeof(Map) !== "undefined" ? Map : null,
-    MapShim, forEach, createCallback;
+    MapPolyfill, forEach, createCallback;
 
 
 if (isNative(NativeMap)) {
-    MapShim = NativeMap;
+    MapPolyfill = NativeMap;
 
-    MapShim.prototype.count = function() {
+    MapPolyfill.prototype.count = function() {
         return this.size;
     };
 } else {
-    MapShim = function Map() {
+    MapPolyfill = function Map() {
         this.__map = createMap();
     };
-    MapShim.prototype.constructor = MapShim;
+    MapPolyfill.prototype.constructor = MapPolyfill;
 
-    MapShim.prototype.get = function(key) {
+    MapPolyfill.prototype.get = function(key) {
 
         return this.__map.get(key);
     };
 
-    MapShim.prototype.set = function(key, value) {
+    MapPolyfill.prototype.set = function(key, value) {
 
         this.__map.set(key, value);
     };
 
-    MapShim.prototype.has = function(key) {
+    MapPolyfill.prototype.has = function(key) {
 
         return this.__map.has(key);
     };
 
-    MapShim.prototype["delete"] = function(key) {
+    MapPolyfill.prototype["delete"] = function(key) {
 
         return this.__map.remove(key);
     };
 
-    MapShim.prototype.clear = function() {
+    MapPolyfill.prototype.clear = function() {
 
         this.__map.clear();
     };
 
     if (Object.defineProperty) {
-        Object.defineProperty(MapShim.prototype, "size", {
+        Object.defineProperty(MapPolyfill.prototype, "size", {
             get: function() {
                 return this.__map.size();
             }
         });
     }
 
-    MapShim.prototype.count = function() {
+    MapPolyfill.prototype.count = function() {
         return this.__map.size();
     };
 
-    MapShim.prototype.length = 1;
+    MapPolyfill.prototype.length = 1;
 
-    MapShim.prototype.forEach = function(fn, thisArg) {
+    MapPolyfill.prototype.forEach = function(fn, thisArg) {
         return forEach(
             this,
             this.__map,
@@ -85,7 +85,7 @@ if (isNative(NativeMap)) {
     };
 }
 
-MapShim.prototype.remove = MapShim.prototype["delete"];
+MapPolyfill.prototype.remove = MapPolyfill.prototype["delete"];
 
 
-module.exports = MapShim;
+module.exports = MapPolyfill;

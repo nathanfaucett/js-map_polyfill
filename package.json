@@ -1,17 +1,17 @@
 {
-  "name": "map_shim",
+  "name": "map_polyfill",
   "version": "0.0.1",
   "description": "Map_shim for the browser and node.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nathanfaucett/map_shim.git"
+    "url": "https://github.com/nathanfaucett/map_polyfill.git"
   },
   "main": "src/index.js",
   "keywords": [
     "map",
     "map.js",
-    "map_shim",
-    "map_shim.js"
+    "map_polyfill",
+    "map_polyfill.js"
   ],
   "author": "Nathan Faucett",
   "license": "BSD-2-Clause",
@@ -19,11 +19,11 @@
   "devDependencies": {
     "grunt": "",
     "grunt-contrib-jshint": "^0.10.0",
-    "grunt-jsbeautifier": ""
+    "grunt-jsbeautifier": "",
+    "mocha": "^2.2.5"
   },
   "dependencies": {
-    "create_map": "nathanfaucett/create_map",
-    "is_native": "nathanfaucett/is_native"
+    "create_map": "git://github.com/nathanfaucett/create_map",
+    "is_native": "git://github.com/nathanfaucett/is_native"
   }
 }
-

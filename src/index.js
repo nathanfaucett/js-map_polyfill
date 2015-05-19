@@ -3,61 +3,56 @@ var isNative = require("is_native"),
 
 
 var NativeMap = typeof(Map) !== "undefined" ? Map : null,
-    MapPolyfill, forEach, createCallback;
+    MapPolyfill, forEach, createCallback, MapPolyfillPrototype;
 
 
 if (isNative(NativeMap)) {
     MapPolyfill = NativeMap;
+    MapPolyfillPrototype = MapPolyfill.prototype;
 
-    MapPolyfill.prototype.count = function() {
+    MapPolyfillPrototype.count = function() {
         return this.size;
     };
 } else {
     MapPolyfill = function Map() {
         this.__map = createMap();
     };
-    MapPolyfill.prototype.constructor = MapPolyfill;
+    MapPolyfillPrototype = MapPolyfill.prototype;
+    MapPolyfillPrototype.constructor = MapPolyfill;
 
-    MapPolyfill.prototype.get = function(key) {
-
+    MapPolyfillPrototype.get = function(key) {
         return this.__map.get(key);
     };
 
-    MapPolyfill.prototype.set = function(key, value) {
-
+    MapPolyfillPrototype.set = function(key, value) {
         this.__map.set(key, value);
     };
 
-    MapPolyfill.prototype.has = function(key) {
-
+    MapPolyfillPrototype.has = function(key) {
         return this.__map.has(key);
     };
 
-    MapPolyfill.prototype["delete"] = function(key) {
-
+    MapPolyfillPrototype["delete"] = function(key) {
         return this.__map.remove(key);
     };
 
-    MapPolyfill.prototype.clear = function() {
-
+    MapPolyfillPrototype.clear = function() {
         this.__map.clear();
     };
 
-    if (Object.defineProperty) {
-        Object.defineProperty(MapPolyfill.prototype, "size", {
-            get: function() {
-                return this.__map.size();
-            }
-        });
-    }
-
-    MapPolyfill.prototype.count = function() {
+    MapPolyfillPrototype.count = function() {
         return this.__map.size();
     };
 
-    MapPolyfill.prototype.length = 1;
+    if (Object.defineProperty) {
+        Object.defineProperty(MapPolyfillPrototype, "size", {
+            get: MapPolyfillPrototype.count
+        });
+    }
 
-    MapPolyfill.prototype.forEach = function(fn, thisArg) {
+    MapPolyfillPrototype.length = 0;
+
+    MapPolyfillPrototype.forEach = function(fn, thisArg) {
         return forEach(
             this,
             this.__map,
@@ -85,7 +80,9 @@ if (isNative(NativeMap)) {
     };
 }
 
-MapPolyfill.prototype.remove = MapPolyfill.prototype["delete"];
+MapPolyfillPrototype.remove = MapPolyfillPrototype["delete"];
+MapPolyfillPrototype.__KeyedCollection__ = true;
+MapPolyfillPrototype.__Collection__ = true;
 
 
 module.exports = MapPolyfill;

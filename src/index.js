@@ -1,5 +1,5 @@
-var isNative = require("is_native"),
-    createMap = require("create_map");
+var isNative = require("@nathanfaucett/is_native"),
+    createMap = require("@nathanfaucett/create_map");
 
 
 var NativeMap = typeof(Map) !== "undefined" ? Map : null,

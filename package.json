@@ -1,5 +1,5 @@
 {
-  "name": "map_polyfill",
+  "name": "@nathanfaucett/map_polyfill",
   "version": "0.0.1",
   "description": "Map_shim for the browser and node.js",
   "repository": {
@@ -11,7 +11,7 @@
     "test": "npm run test-node",
     "test-node": "node ./test | ./node_modules/.bin/tap-spec",
     "test-node-raw": "node ./test",
-    "test-browser-local": "zuul --local 8080 --ui tape -- ./test"
+    "test-browser-local": "zuul --local 9999 --ui tape -- ./test"
   },
   "keywords": [
     "map",
@@ -23,15 +23,15 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.11.3",
-    "grunt-jsbeautifier": "^0.2.10",
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-jsbeautifier": "^0.2.13",
     "tap-spec": "^4.1.0",
-    "tape": "^4.2.0",
-    "zuul": "^3.6.0"
+    "tape": "^4.2.2",
+    "zuul": "^3.7.2"
   },
   "dependencies": {
-    "create_map": "git://github.com/nathanfaucett/create_map.git",
-    "is_native": "git://github.com/nathanfaucett/is_native.git"
+    "@nathanfaucett/create_map": "^0.0.1",
+    "@nathanfaucett/is_native": "^0.0.2"
   }
 }

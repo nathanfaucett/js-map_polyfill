@@ -1,5 +1,5 @@
 var isNative = require("@nathanfaucett/is_native"),
-    createMap = require("@nathanfaucett/create_map");
+    HashMap;
 
 
 var NativeMap = typeof(Map) !== "undefined" ? Map : null,
@@ -14,34 +14,37 @@ if (isNative(NativeMap)) {
         return this.size;
     };
 } else {
+    HashMap = require("./HashMap");
+
+
     MapPolyfill = function Map() {
-        this.__map = createMap();
+        this._map = new HashMap();
     };
     MapPolyfillPrototype = MapPolyfill.prototype;
     MapPolyfillPrototype.constructor = MapPolyfill;
 
     MapPolyfillPrototype.get = function(key) {
-        return this.__map.get(key);
+        return this._map.get(key);
     };
 
     MapPolyfillPrototype.set = function(key, value) {
-        this.__map.set(key, value);
+        this._map.set(key, value);
     };
 
     MapPolyfillPrototype.has = function(key) {
-        return this.__map.has(key);
+        return this._map.has(key);
     };
 
     MapPolyfillPrototype["delete"] = function(key) {
-        return this.__map.remove(key);
+        return this._map.remove(key);
     };
 
     MapPolyfillPrototype.clear = function() {
-        this.__map.clear();
+        this._map.clear();
     };
 
     MapPolyfillPrototype.count = function() {
-        return this.__map.size();
+        return this._map.size();
     };
 
     if (Object.defineProperty) {
@@ -55,17 +58,27 @@ if (isNative(NativeMap)) {
     MapPolyfillPrototype.forEach = function(fn, thisArg) {
         return forEach(
             this,
-            this.__map,
+            this._map,
             thisArg != null ? createCallback(fn, thisArg) : fn
         );
     };
 
+    MapPolyfillPrototype.keys = function() {
+        return this._map.keys();
+    };
+
+    MapPolyfillPrototype.values = function() {
+        return this._map.values();
+    };
+
     forEach = function forEach(obj, map, fn) {
-        var i = -1,
-            il = map.count() - 1;
+        var keys = map.keys(),
+            values = map.values(),
+            i = -1,
+            il = values.length - 1;
 
         while (i++ < il) {
-            if (fn(map.value(i), map.key(i), obj) === false) {
+            if (fn(values[i], keys[i], obj) === false) {
                 return false;
             }
         }

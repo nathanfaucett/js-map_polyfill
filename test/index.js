@@ -47,3 +47,47 @@ tape("Map#clear()", function(assert) {
     assert.equal(a.count(), 0, "should remove all keys from map");
     assert.end();
 });
+
+tape("Map#forEach()", function(assert) {
+    var a = new MapPolyFill(),
+        index = 0;
+
+    a.set(0, 0);
+    a.set(1, 1);
+    a.set(2, 2);
+
+    assert.deepEquals(a.keys(), [0, 1, 2]);
+    assert.deepEquals(a.values(), [0, 1, 2]);
+
+    a.forEach(function(value, key) {
+        assert.equals(value, index);
+        assert.equals(key, index);
+        index += 1;
+    });
+
+    assert.end();
+});
+
+tape("Map many keys and values", function(assert) {
+    var a = new MapPolyFill(),
+        size = 100000,
+        array = new Array(size),
+        i, value;
+
+    i = size;
+    while (i--) {
+        value = {};
+        array[i] = value;
+        a.set(value, value);
+    }
+
+    i = size;
+    while (i--) {
+        value = array[i];
+        if (!a.has(value)) {
+            assert.end(new Error("should contain find values"));
+        }
+    }
+
+    assert.end();
+});

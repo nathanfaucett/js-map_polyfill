@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/map_polyfill",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Map_shim for the browser and node.js",
   "repository": {
     "type": "git",
@@ -31,7 +31,9 @@
     "zuul": "^3.7.2"
   },
   "dependencies": {
-    "@nathanfaucett/create_map": "^0.0.1",
-    "@nathanfaucett/is_native": "^0.0.2"
+    "@nathanfaucett/hash_code": "^0.0.2",
+    "@nathanfaucett/is_native": "^0.0.2",
+    "@nathanfaucett/is_null_or_undefined": "0.0.1",
+    "@nathanfaucett/is_undefined": "^0.0.1"
   }
 }

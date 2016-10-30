@@ -72,6 +72,7 @@ tape("Map many keys and values", function(assert) {
     var a = new MapPolyFill(),
         size = 100000,
         array = new Array(size),
+        error = false,
         i, value;
 
     i = size;
@@ -85,9 +86,11 @@ tape("Map many keys and values", function(assert) {
     while (i--) {
         value = array[i];
         if (!a.has(value)) {
-            assert.end(new Error("should contain find values"));
+            error = true;
         }
     }
+
+    assert.equals(error, false, "should contain all values");
 
     assert.end();
 });

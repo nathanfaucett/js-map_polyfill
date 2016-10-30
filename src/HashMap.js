@@ -109,6 +109,25 @@ HashMapPrototype.values = function() {
     return values;
 };
 
+HashMapPrototype.toArray = function() {
+    var values = new Array(this._size),
+        table = this._table,
+        i = -1,
+        il = table.length - 1,
+        index = 0,
+        value;
+
+    while (i++ < il) {
+        value = table[i];
+
+        if (value instanceof HashNode) {
+            values[index++] = [value.key, value.value];
+        }
+    }
+
+    return values;
+};
+
 HashMapPrototype.set = function(key, value) {
     var table = this._table,
         hash = (hashCode(key) % table.length),

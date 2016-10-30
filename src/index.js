@@ -72,13 +72,15 @@ if (isNative(NativeMap)) {
     };
 
     forEach = function forEach(obj, map, fn) {
-        var keys = map.keys(),
-            values = map.values(),
+        var array = map.toArray(),
             i = -1,
-            il = values.length - 1;
+            il = array.length - 1,
+            entry;
 
         while (i++ < il) {
-            if (fn(values[i], keys[i], obj) === false) {
+            entry = array[i];
+
+            if (fn(entry[1], entry[0], obj) === false) {
                 return false;
             }
         }

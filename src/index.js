@@ -1,5 +1,5 @@
 var isNative = require("@nathanfaucett/is_native"),
-    HashMap;
+    createMap = require("@nathanfaucett/create_map");
 
 
 var NativeMap = typeof(Map) !== "undefined" ? Map : null,
@@ -14,11 +14,8 @@ if (isNative(NativeMap)) {
         return this.size;
     };
 } else {
-    HashMap = require("./HashMap");
-
-
     MapPolyfill = function Map() {
-        this._map = new HashMap();
+        this._map = createMap();
     };
     MapPolyfillPrototype = MapPolyfill.prototype;
     MapPolyfillPrototype.constructor = MapPolyfill;

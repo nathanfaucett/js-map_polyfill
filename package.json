@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/map_polyfill",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Map polyfill for the browser and node.js",
   "repository": {
     "type": "git",
@@ -32,8 +32,7 @@
     "zuul": "^3.11.0"
   },
   "dependencies": {
-    "@nathanfaucett/hash_code": "^0.0.2",
-    "@nathanfaucett/is_native": "^0.0.2",
-    "@nathanfaucett/is_null_or_undefined": "^0.0.1"
+    "@nathanfaucett/create_map": "^0.0.2",
+    "@nathanfaucett/is_native": "^0.0.2"
   }
 }
